@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     controller: _glassCountTEController,
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
-                    decoration:  InputDecoration(hintText: "Enter Glass", labelText: 'Enter Glass'),
+                    decoration:  const InputDecoration(hintText: "Enter Glass", labelText: 'Enter Glass'),
                   ),
                 ),
                 const SizedBox(
