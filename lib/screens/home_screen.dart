@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../consumer_class.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,64 +30,80 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    _addwaterConsume();
-                  },
-                  child: Container(
-                    width: 200,
-                    height: 200,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                              "https://static.vecteezy.com/system/resources/previews/007/126/517/non_2x/water-droplet-icon-free-vector.jpg",
-                            ),
-                            fit: BoxFit.contain)),
-                    child: const Text('Tap Here'),
-                  ),
-                ),
-                SizedBox(
-                  width: 100,
-                  child: TextField(
-                    controller: _glassCountTEController,
-                    textAlign: TextAlign.center,
-                    keyboardType: TextInputType.number,
-                    decoration:  const InputDecoration(hintText: "Enter Glass", labelText: 'Enter Glass'),
-                  ),
-                ),
+                _trackerTapButton(),
+                _trackerInputField(),
                 const SizedBox(
                   height: 50,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('History'),
-                    Text('Total: ${_getTotalcount()}'),
-                  ],
-                ),
+                _trackerHistoryNav(),
                 const Divider(
                   height: 10,
                 ),
-                ListView.builder(
-                  primary: false,
-                  shrinkWrap: true,
-                  itemCount: WaterConsumeList.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                          DateFormat.yMEd().add_jms().format(DateTime.now())),
-                      leading: CircleAvatar(
-                        child: Text('${index + 1}'),
-                      ),
-                      trailing: Text(WaterConsumeList[index].glasscount.toString()),
-                    );
-                  },
-                )
+                _trackerBuilder()
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _trackerInputField() {
+    return SizedBox(
+      width: 100,
+      child: TextField(
+        controller: _glassCountTEController,
+        textAlign: TextAlign.center,
+        keyboardType: TextInputType.number,
+        decoration: const InputDecoration(
+            hintText: "Enter Glass", labelText: 'Enter Glass'),
+      ),
+    );
+  }
+
+  Widget _trackerHistoryNav() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text('History'),
+        Text('Total: ${_getTotalcount()}'),
+      ],
+    );
+  }
+
+  Widget _trackerBuilder() {
+    return ListView.builder(
+      primary: false,
+      shrinkWrap: true,
+      itemCount: WaterConsumeList.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(DateFormat.yMEd().add_jms().format(DateTime.now())),
+          leading: CircleAvatar(
+            child: Text('${index + 1}'),
+          ),
+          trailing: Text(WaterConsumeList[index].glasscount.toString()),
+        );
+      },
+    );
+  }
+
+  Widget _trackerTapButton() {
+    return GestureDetector(
+      onTap: () {
+        _addwaterConsume();
+      },
+      child: Container(
+        width: 200,
+        height: 200,
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage(
+                  "https://static.vecteezy.com/system/resources/previews/007/126/517/non_2x/water-droplet-icon-free-vector.jpg",
+                ),
+                fit: BoxFit.contain)),
+        child: const Text('Tap Here'),
       ),
     );
   }
@@ -100,17 +117,11 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
-  int _getTotalcount(){
+  int _getTotalcount() {
     int totalCount = 0;
-    for (WaterConsume waterConsume in WaterConsumeList){
+    for (WaterConsume waterConsume in WaterConsumeList) {
       totalCount += waterConsume.glasscount;
     }
     return totalCount;
   }
-}
-
-class WaterConsume {
-  final DateTime time;
-  final int glasscount;
-  WaterConsume({required this.time, required this.glasscount});
 }
